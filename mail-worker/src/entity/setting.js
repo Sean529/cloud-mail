@@ -41,7 +41,7 @@ export const setting = sqliteTable('setting', {
 	s3AccessKey: text('s3_access_key').default('').notNull(),
 	s3SecretKey: text('s3_secret_key').default('').notNull(),
 	forcePathStyle: integer('force_path_style').default(1).notNull(),
-	customDomain: text('custom_domain').default('').notNull(),
+	customDomain: text('custom_domain').default('mail.hiyinni.cn').notNull(),
 	tgMsgFrom: text('tg_msg_from').default('only-name').notNull(),
 	tgMsgTo: text('tg_msg_to').default('show').notNull(),
 	tgMsgText: text('tg_msg_text').default('hide').notNull(),

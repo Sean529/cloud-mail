@@ -16,6 +16,7 @@ jobs:
     env:
       NAME: ${{ secrets.NAME || vars.NAME || 'cloud-mail' }}
       CUSTOM_DOMAIN: ${{ secrets.CUSTOM_DOMAIN || vars.CUSTOM_DOMAIN }}
+      ZONE_NAME: ${{ secrets.ZONE_NAME || vars.ZONE_NAME }}
       DOMAIN: ${{ secrets.DOMAIN || vars.DOMAIN }}
       ADMIN: ${{ secrets.ADMIN || vars.ADMIN }}
       JWT_SECRET: ${{ secrets.JWT_SECRET || vars.JWT_SECRET }}
@@ -92,6 +93,10 @@ jobs:
           if [ -z "$CUSTOM_DOMAIN" ]; then
             echo "::warning:: CUSTOM_DOMAIN variable is not set."
           fi
+
+          if [ -n "$CUSTOM_DOMAIN" ] && [ -z "$ZONE_NAME" ]; then
+            echo "::warning:: ZONE_NAME variable is not set. Wrangler will try to infer the zone."
+          fi
           
           CONFIG_FILE="wrangler-action.toml"
           
@@ -109,10 +114,13 @@ jobs:
           
           if [ -z "$CUSTOM_DOMAIN" ]; then
             sed -i '/\[\[routes\]\]/,/^$/d' "$CONFIG_FILE"
+          elif [ -z "$ZONE_NAME" ]; then
+            sed -i '/^zone_name = /d' "$CONFIG_FILE"
           fi
 
           sed -i "s|\${NAME}|${NAME}|g" "$CONFIG_FILE"
           sed -i "s|\${CUSTOM_DOMAIN}|${CUSTOM_DOMAIN}|g" "$CONFIG_FILE"
+          sed -i "s|\${ZONE_NAME}|${ZONE_NAME}|g" "$CONFIG_FILE"
           sed -i "s|\"\${DOMAIN}\"|${DOMAIN}|g" "$CONFIG_FILE"
           sed -i "s|\${ADMIN}|${ADMIN}|g" "$CONFIG_FILE"
           sed -i "s|\${JWT_SECRET}|${JWT_SECRET}|g" "$CONFIG_FILE"

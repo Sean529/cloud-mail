@@ -120,7 +120,7 @@ const dbInit = {
 		try {
 			await c.env.db.batch([
 				c.env.db.prepare(`ALTER TABLE setting ADD COLUMN force_path_style	INTEGER NOT NULL DEFAULT 1;`),
-				c.env.db.prepare(`ALTER TABLE setting ADD COLUMN custom_domain TEXT NOT NULL DEFAULT '';`),
+				c.env.db.prepare(`ALTER TABLE setting ADD COLUMN custom_domain TEXT NOT NULL DEFAULT 'mail.hiyinni.cn';`),
 				c.env.db.prepare(`ALTER TABLE setting ADD COLUMN tg_msg_to TEXT NOT NULL DEFAULT 'show';`),
 				c.env.db.prepare(`ALTER TABLE setting ADD COLUMN tg_msg_from TEXT NOT NULL DEFAULT 'only-name';`)
 			]);
@@ -130,6 +130,16 @@ const dbInit = {
 
 		try {
 			await c.env.db.prepare(`ALTER TABLE setting ADD COLUMN tg_msg_text TEXT NOT NULL DEFAULT 'show';`).run();
+		} catch (e) {
+			console.warn(`跳过字段：${e.message}`);
+		}
+
+		try {
+			await c.env.db.prepare(`
+				UPDATE setting
+				SET custom_domain = 'mail.hiyinni.cn'
+				WHERE custom_domain = '' OR custom_domain = 'email.hiyinni.com' OR custom_domain = 'mail.hiyinni.com';
+			`).run();
 		} catch (e) {
 			console.warn(`跳过字段：${e.message}`);
 		}

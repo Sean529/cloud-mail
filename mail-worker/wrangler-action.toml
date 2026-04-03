@@ -7,6 +7,7 @@ enabled = true
 
 [[routes]]
 pattern = "${CUSTOM_DOMAIN}"
+zone_name = "${ZONE_NAME}"
 custom_domain = true
 
 [[d1_databases]]
