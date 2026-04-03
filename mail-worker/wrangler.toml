@@ -36,8 +36,8 @@ crons = ["0 16 * * *"]	#定时任务每天晚上12点执行
 
 [vars]
 orm_log = false
-domain = ["hiyinni.cn", "email.hiyinni.com"]
-admin = "admin@hiyinni.cn"
+domain = ["email.hiyinni.com"]
+admin = "admin@email.hiyinni.com"
 jwt_secret = "3cb43ce6f031e40bb6c519f08b6eb42c4fe94c41"
 
 [build]
